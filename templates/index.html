@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Salary Predictor</title>
+</head>
+<body>
+    <h2>Salary Predictor</h2>
+    <form id="salary-form">
+        <label for="age">Age:</label><br>
+        <input type="text" id="age" name="Age"><br>
+        <label for="gender">Gender:</label><br>
+        <input type="text" id="gender" name="Gender"><br>
+        <label for="education_level">Education Level:</label><br>
+        <input type="text" id="education_level" name="Education Level"><br>
+        <label for="job_title">Job Title:</label><br>
+        <input type="text" id="job_title" name="Job Title"><br>
+        <label for="years_of_experience">Years of Experience:</label><br>
+        <input type="text" id="years_of_experience" name="Years of Experience"><br>
+        <label for="country">Country:</label><br>
+        <input type="text" id="country" name="Country"><br>
+        <label for="race">Race:</label><br>
+        <input type="text" id="race" name="Race"><br>
+        <label for="senior">Senior:</label><br>
+        <input type="text" id="senior" name="Senior"><br><br>
+        <input type="button" value="Submit" onclick="predictSalary()">
+    </form>
+    <h3 id="result"></h3>
+
+    <script>
+        async function predictSalary() {
+            const form = document.getElementById('salary-form');
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+
+            const response = await fetch('http://127.0.0.1:5000/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = 'Predicted Salary: ' + result.predicted_salary;
+        }
+    </script>
+</body>
+</html>

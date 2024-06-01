@@ -27,7 +27,7 @@ def predict():
     
     prediction = model.predict(input_data)[0]
     # print(prediction
-    return jsonify({'predicted_salary': prediction})
+    return jsonify({'predicted_salary': prediction + ' per Year(Annualy)'})
 
 if __name__ == '__main__':
     app.run(debug=True)

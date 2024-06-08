@@ -1,49 +1,141 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Salary Predictor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Market Analysis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 50px; }
+        .container { max-width: 600px; }
+        #year-form, #salary-form, #trend-plot, #salary-result { display: none; }
+    </style>
 </head>
 <body>
-    <h2>Salary Predictor</h2>
-    <form id="salary-form">
-        <label for="age">Age:</label><br>
-        <input type="text" id="age" name="Age"><br>
-        <label for="gender">Gender:</label><br>
-        <input type="text" id="gender" name="Gender"><br>
-        <label for="education_level">Education Level:</label><br>
-        <input type="text" id="education_level" name="Education Level"><br>
-        <label for="job_title">Job Title:</label><br>
-        <input type="text" id="job_title" name="Job Title"><br>
-        <label for="years_of_experience">Years of Experience:</label><br>
-        <input type="text" id="years_of_experience" name="Years of Experience"><br>
-        <label for="country">Country:</label><br>
-        <input type="text" id="country" name="Country"><br>
-        <label for="race">Race:</label><br>
-        <input type="text" id="race" name="Race"><br>
-        <label for="senior">Senior:</label><br>
-        <input type="text" id="senior" name="Senior"><br><br>
-        <input type="button" value="Submit" onclick="predictSalary()">
-    </form>
-    <h3 id="result"></h3>
-
+    <div class="container">
+        <h1 class="text-center">Software Job Market Analysis</h1>
+        <div class="mt-4 text-center">
+            <button id="btn-trend" class="btn btn-primary">Trend Analysis</button>
+            <button id="btn-salary" class="btn btn-secondary">Salary Prediction</button>
+        </div>
+        <form id="year-form" class="mt-4">
+            <div class="form-group">
+                <label for="start-year">Start Year:</label>
+                <input type="number" class="form-control" id="start-year" name="start_year" required>
+            </div>
+            <div class="form-group">
+                <label for="end-year">End Year:</label>
+                <input type="number" class="form-control" id="end-year" name="end_year" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <form id="salary-form" class="mt-4">
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" class="form-control" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <input type="text" class="form-control" id="gender" name="Gender" required>
+            </div>
+            <div class="form-group">
+                <label for="degree">Education Level:</label>
+                <input type="text" class="form-control" id="education" name="degree" required>
+            </div>  
+            <div class="form-group">
+                <label for="job-title">Job Title:</label>
+                <input type="text" class="form-control" id="job-title" name="job_title" required>
+            </div>
+            <div class="form-group">
+                <label for="experience_years">Experience Years:</label>
+                <input type="number" class = "form-control" id="experience_years" name="experience_years" required>
+            </div>
+            <div class="form-group">
+                <label for="country">Country:</label>
+                <input type="text" class="form-control" id="country" name="country" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div id="trend-plot" class="mt-4">
+            <h3 class="text-center">Trend Analysis</h3>
+            <img id="plot-image" class="img-fluid" alt="Trend Analysis Plot">
+        </div>
+        <div id="salary-result" class="mt-4">
+            <h3 class="text-center">Salary Prediction</h3>
+            <p class="text-center" id="predicted-salary"></p>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        async function predictSalary() {
-            const form = document.getElementById('salary-form');
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => data[key] = value);
-
-            const response = await fetch('http://127.0.0.1:5000/predict', {
+        // Replace with the actual URL of your Flask API
+        const apiUrl = 'http://localhost:5000/forecast';
+    
+        function getForecast(startYear, endYear) {
+            const data = {
+                start_year: startYear,
+                end_year: endYear
+            };
+    
+            fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(forecast => {
+                console.log('Forecast:', forecast);
+                // Process the forecast data (e.g., plot it on a chart)
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
-
-            const result = await response.json();
-            document.getElementById('result').innerText = 'Predicted Salary: ' + result.predicted_salary;
         }
+    
+        $(document).ready(function() {
+            $('#btn-trend').on('click', function() {
+                $('#year-form').show();
+                $('#salary-form').hide();
+                $('#trend-plot').hide();
+                $('#salary-result').hide();
+            });
+            $('#btn-salary').on('click', function() {
+                $('#year-form').hide();
+                $('#salary-form').show();
+                $('#trend-plot').hide();
+                $('#salary-result').hide();
+            });
+            $('#salary-form').on('submit', function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: '/predict_salary',
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        $('#predicted-salary').text('Predicted Salary: $' + response.predicted_salary + ' Annually');
+                        $('#salary-result').show();
+                    }
+                });
+            });
+        });
     </script>
-</body>
-</html>
+    <script>
+        $(document).ready(function() {
+            $('#year-form').on('submit', function(event) {
+                event.preventDefault();
+                var start_year = $('#start-year').val();
+                var end_year = $('#end-year').val();
+                $.ajax({
+                    url: '/predict',
+                    method: 'POST',
+                    data: { start_year: start_year, end_year: end_year }, 
+                    success: function(response) {
+                        $('#plot-image').attr('src', 'data:image/png;base64,' + response.plot_url);
+                        $('#trend-plot').show();
+                    }
+                });
+            });
+        });
+    </script>

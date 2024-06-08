@@ -12,13 +12,13 @@ import matplotlib.pyplot as plt
 app = Flask(__name__)
 
 # Load the trained model and encoders/scalers
-model = joblib.load('pickels/linear_regression_model.pkl')
-degree_encode = joblib.load('pickels/degree_encoder.pkl')
-job_title_encoder = joblib.load('pickels/job_title_encoder.pkl')
-scaler_age = joblib.load('pickels/age_scaler.pkl')
-scaler_experience = joblib.load('pickels/experience_scaler.pkl')
-country_encoder = joblib.load('pickels/Country_encoder.pkl') 
-with open('pickels/arima_model.pkl', 'rb') as pkl_file:
+model = joblib.load('linear_regression_model.pkl')
+degree_encode = joblib.load('degree_encoder.pkl')
+job_title_encoder = joblib.load('job_title_encoder.pkl')
+scaler_age = joblib.load('age_scaler.pkl')
+scaler_experience = joblib.load('experience_scaler.pkl')
+country_encoder = joblib.load('Country_encoder.pkl') 
+with open('arima_model.pkl', 'rb') as pkl_file:
     arima_model_fit = pickle.load(pkl_file)
 
 @app.route('/')

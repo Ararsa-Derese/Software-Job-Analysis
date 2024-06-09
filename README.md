@@ -39,7 +39,7 @@ code .
 2. Create a virtual environment and activate 
 ```bash
 python -m venv env
-env/bin/activate
+source env/bin/activate
 ```
 3. install the requirments
 ```bash

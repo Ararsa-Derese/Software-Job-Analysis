@@ -29,27 +29,22 @@ Publicly available datasets and APIs
 # Getting Started
 To get started with Model, follow these steps:
 
-1. Clone the Repository:
 
-```bash
-git clone git@github.com:Ararsa-Derese/Software-Job-Analysis.git
-cd Software-Job-Analysis
-code .
-```
-2. Create a virtual environment and activate 
+1. Create a virtual environment and activate 
 ```bash
 python -m venv env
 source env/bin/activate
 ```
-3. install the requirments
+2. install the requirments
 ```bash
 pip install -r requirements.txt
 ```
-4. Train the model
+3. Train the model
 ```bash
-run both Salary.ipynb and Trends.ipynb
+# run Salary.ipynb and Trends.ipynb
+# There will be pickles file in your folder
 ```
-5. Run the server
+4. Run the server
 
 ```
 python app.py
@@ -61,5 +56,12 @@ Enter a Start date and end Date to see a Trend.
 ##  Salary Prediction: 
 Input relevant details to receive a salary prediction.
 ![Alt Text](salary.png)
-## Contributions
-Contributions are welcome! Please fork the repository and submit a pull request with your proposed changes.
+
+## Contributors (Team Members)
+### 1. Ararsa Derese ETS0152/13
+### 2. Birhanu Worku ETS0279/13
+### 3. Biruk Mesfin  ETS0290/13
+### 4. Bisrat Kebere ETS0306/13
+### 5. Biyaol Mesay  ETS0309/13
+
+

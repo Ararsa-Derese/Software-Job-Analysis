@@ -18,8 +18,7 @@ job_title_encoder = joblib.load('job_title_encoder.pkl')
 scaler_age = joblib.load('age_scaler.pkl')
 scaler_experience = joblib.load('experience_scaler.pkl')
 country_encoder = joblib.load('Country_encoder.pkl') 
-with open('arima_model.pkl', 'rb') as pkl_file:
-    arima_model_fit = pickle.load(pkl_file)
+arima_model_fit = joblib.load('arima_model')
 
 @app.route('/')
 def home():
@@ -30,9 +29,6 @@ trend_data['date_posted'] = pd.to_datetime(trend_data['date_posted'])
 trend_data.set_index('date_posted', inplace=True)
 monthly_job_postings = trend_data.resample('ME').size()
 
-# Load the saved ARIMA model
-with open('arima_model.pkl', 'rb') as pkl_file:
-    arima_model_fit = pickle.load(pkl_file)
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -41,20 +37,18 @@ def predict():
     end_year = request.form['end_year']   
     
     # Generate predictions for the entire year
-    date_range = pd.date_range(start=start_year, end=end_year, freq='ME')
+    date_range = pd.date_range(start="2024", end=end_year, freq='ME')
     
     # Calculate the number of steps to forecast
-    steps = len(date_range)
-    
+    steps = len(date_range)+24
     # Generate forecasts
-    forecast = arima_model_fit.forecast(steps=steps)
-    forecast_index = pd.date_range(start=monthly_job_postings.index[-1], periods=steps+1, freq='ME')[1:]
+    forecast = arima_model_fit.forecast(steps=steps)    
+    forecast_index = pd.date_range(start=start_year+"-01-01 00:00:00", periods=steps+1, freq='ME')[1:]
     forecast_series = pd.Series(forecast, index=forecast_index)
-    
-    # Plot the historical data and the forecast
     plt.figure(figsize=(12, 6))
     plt.plot(monthly_job_postings, label='Historical Data')
     plt.plot(forecast_series, label='Forecast', color='red')
+    print(monthly_job_postings.index[-1])
     plt.axvline(x=monthly_job_postings.index[-1], linestyle='--', color='gray')
     plt.title('Job Postings Forecast')
     plt.xlabel('Date')
@@ -63,7 +57,7 @@ def predict():
     plt.grid(True)
     
     # Save the plot as a PNG image in memory
-    img = io.BytesIO()
+    img = BytesIO()
     plt.savefig(img, format='png')
     img.seek(0)
     plot_url = base64.b64encode(img.getvalue()).decode('utf8')
@@ -77,7 +71,8 @@ def predict_salary():
     degree = request.form['degree']
     job_title = request.form['job_title']
     country = request.form['country']
-    
+    if country == "Ethiopia":
+        country = "USA"
     print(age, experience_years, degree, job_title)
     # Ensure the input data is present in the encoders
     if degree == 'Bachelors':

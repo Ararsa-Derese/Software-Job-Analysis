@@ -21,11 +21,11 @@
         <form id="year-form" class="mt-4">
             <div class="form-group">
                 <label for="start-year">Start Year:</label>
-                <input type="number" class="form-control" id="start-year" name="start_year" required>
+                <input type="number" class="form-control" id="start-year" name="start_year" required min="2024">
             </div>
             <div class="form-group">
                 <label for="end-year">End Year:</label>
-                <input type="number" class="form-control" id="end-year" name="end_year" required>
+                <input type="number" class="form-control" id="end-year" name="end_year" required min="2025">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
@@ -36,15 +36,30 @@
             </div>
             <div class="form-group">
                 <label for="gender">Gender:</label>
-                <input type="text" class="form-control" id="gender" name="Gender" required>
+                <select class="form-control" id="gender" name="Gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="degree">Education Level:</label>
-                <input type="text" class="form-control" id="education" name="degree" required>
-            </div>  
+                <select class="form-control" id="degree" name="degree" required>
+                    <option value="Bachelors">Bachelors</option>
+                    <option value="Masters">Masters</option>
+                    <option value="Phd">Phd</option>
+                </select>
+            </div> 
             <div class="form-group">
                 <label for="job-title">Job Title:</label>
-                <input type="text" class="form-control" id="job-title" name="job_title" required>
+                <select class="form-control" id="job-title" name="job_title" required>
+                    <option value="Software Engineer">Software Engineer</option>
+                    <option value="Full Stack Engineer">Full Stack Developer</option>
+                    <option value="Data Scientist">Data Scientist</option>
+                    <option value="Product Manager">Product Manager</option>
+                    <option value="UX Designer">UI/UX Designer</option>
+                    <option value="Back end Developer">Backend Developer</option>
+                    <option value="Front end Developer">Frontend Developer</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="experience_years">Experience Years:</label>
@@ -52,7 +67,14 @@
             </div>
             <div class="form-group">
                 <label for="country">Country:</label>
-                <input type="text" class="form-control" id="country" name="country" required>
+                <select class="form-control" id="country" name="country" required>
+                    <option value="USA">USA</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Ethiopia">Ethiopia</option>
+                    <option value="China">China</option>
+                    <option value="UK">UK</option>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
